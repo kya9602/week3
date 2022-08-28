@@ -5,7 +5,7 @@ export const __getPosts = createAsyncThunk(
     "posts/getPosts",
     async (payload, thunkAPI) => {
         try {
-            const data =  await axios.get("http://localhost:3001/posts");
+            const data =  await axios.get(process.env.REACT_APP_POSTS_HOST);
             return thunkAPI.fulfillWithValue(data.data);
           } catch (error) {
             return thunkAPI.rejectWithValue(error);
@@ -23,22 +23,22 @@ export const posts = createSlice({
     reducers:{
         createPost(state, action){
           state.posts.push(action.payload);
-          axios.post("http://localhost:3001/posts", action.payload );
+          axios.post(process.env.REACT_APP_POSTS_HOST, action.payload );
         },
         removePost(state, action){
           let  index = state.posts.findIndex(post =>  post.id === action.payload);
 			    state.posts.splice(index,1);
-          axios.delete(`http://localhost:3001/posts/${action.payload}`);
+          axios.delete(`${process.env.REACT_APP_POSTS_HOST}/${action.payload}`);
         },
         updatePost(state, action){
           let  index = state.posts.findIndex(post =>  post.id === action.payload.id);
 			    state.posts.splice(index, 1, action.payload);
-          axios.patch(`http://localhost:3001/posts/${action.payload.id}`, action.payload);
+          axios.patch(`${process.env.REACT_APP_POSTS_HOST}/${action.payload.id}`, action.payload);
         },
         likePost(state, action){
           let index = state.posts.findIndex(post => post.id === action.payload.id);
 			    state.posts[index].count +=1;
-          axios.patch(`http://localhost:3001/posts/${action.payload.id}`, action.payload);
+          axios.patch(`${process.env.REACT_APP_POSTS_HOST}/${action.payload.id}`, action.payload);
         },
     },
     extraReducers: {

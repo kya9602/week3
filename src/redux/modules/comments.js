@@ -5,7 +5,7 @@ export const __getComments = createAsyncThunk(
     "comments/getComments",
     async (payload, thunkAPI) => {
         try {
-            const data =  await axios.get("http://localhost:3001/comments");
+            const data =  await axios.get(process.env.REACT_APP_COMMENTS_HOST);
             return thunkAPI.fulfillWithValue(data.data);
           } catch (error) {
             return thunkAPI.rejectWithValue(error);
@@ -22,17 +22,17 @@ export const comments = createSlice({
     reducers:{
         createComment(state, action){
             state.comments.push(action.payload);
-            axios.post("http://localhost:3001/comments",action.payload );
+            axios.post(process.env.REACT_APP_COMMENTS_HOST,action.payload );
         },
         removeComment(state, action){
             let  index = state.comments.findIndex(comment =>  comment.id === action.payload);
 			state.comments.splice(index,1);
-            axios.delete(`http://localhost:3001/comments/${action.payload}`);
+            axios.delete(`${process.env.REACT_APP_COMMENTS_HOST}/${action.payload}`);
         },
         updateComment(state, action){
             let  index = state.comments.findIndex(post =>  post.id === action.payload.id);
 			state.comments.splice(index, 1, action.payload);
-            axios.patch(`http://localhost:3001/comments/${action.payload.id}`, action.payload);
+            axios.patch(`${process.env.REACT_APP_COMMENTS_HOST}/${action.payload.id}`, action.payload);
         }
     },
     extraReducers: {
